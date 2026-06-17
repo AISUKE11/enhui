@@ -1,43 +1,54 @@
-<script>
-    // 核心切换逻辑
-    function nextLevel(current) {
-        document.getElementById('level' + current).classList.remove('active');
-        document.getElementById('level' + (current + 1)).classList.add('active');
-    }
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>认错小信件</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #ffe5ec; font-family: sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        
+        .card { background: white; width: 320px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center; display: none; }
+        .card.active { display: block; }
+        
+        button { background: #ff4d6d; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        button:disabled { background: #ccc; }
+        h2 { color: #ff4d6d; margin-bottom: 15px; }
+        p { color: #555; line-height: 1.6; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
 
-    // 第3关：心跳充能逻辑
-    let clicks = 0;
-    function chargeHeart() {
-        if(clicks < 5) {
-            clicks++;
-            document.querySelector('#level3 h2').innerText = `我的心跳现在是 ${clicks * 20}% 💓`;
-            if(clicks === 5) {
-                document.querySelector('#level3 h2').innerText = `我的心跳现在是 100% 💖`;
-                document.getElementById('chargeStatus').innerText = "充能 100%！满血复活！";
-                document.getElementById('level3Btn').style.display = 'inline-block';
+    <div id="level1" class="card active">
+        <h2>神秘信件 💌</h2>
+        <p>你有一封未读的认错请求...</p>
+        <button onclick="goNext(1)">点击拆阅</button>
+    </div>
+
+    <div id="level2" class="card">
+        <h2>深度反思 💻</h2>
+        <p>我是笨蛋，惹你生气了。可以原谅我吗？</p>
+        <button onclick="goNext(2)">激活原谅卡</button>
+    </div>
+
+    <div id="level3" class="card">
+        <h2>恭喜！🎉</h2>
+        <p>谢谢宝贝的原谅！今晚听凭差遣！</p>
+        <button onclick="location.reload()">再玩一次</button>
+    </div>
+
+    <script>
+        // 核心跳转函数：使用简单的ID获取，确保不报错
+        function goNext(current) {
+            document.getElementById('level' + current).classList.remove('active');
+            let next = current + 1;
+            let nextElement = document.getElementById('level' + next);
+            if (nextElement) {
+                nextElement.classList.add('active');
+            } else {
+                alert("已经到最后啦！");
             }
         }
-    }
-
-    // 第4关：多选框勾选逻辑
-    function toggleCheck(id) {
-        const checkbox = document.getElementById(id);
-        checkbox.checked = !checkbox.checked;
-        checkClauses();
-    }
-    function checkClauses() {
-        const c1 = document.getElementById('c1').checked;
-        const c2 = document.getElementById('c2').checked;
-        const c3 = document.getElementById('c3').checked;
-        document.getElementById('level4Btn').disabled = !(c1 && c2 && c3);
-    }
-
-    // 第5关：赖皮跑路按钮逻辑 (已解决函数冲突)
-    function moveAway(btn) {
-        // 确保按钮位置在可视范围内
-        const x = Math.floor(Math.random() * 70) + 10;
-        const y = Math.floor(Math.random() * 70) + 10;
-        btn.style.left = x + 'vw';
-        btn.style.top = y + 'vh';
-    }
-</script>
+    </script>
+</body>
+</html>
