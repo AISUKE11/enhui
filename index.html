@@ -30,12 +30,12 @@
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(255, 75, 110, 0.15);
             text-align: center;
-            display: none; /* 默认全部隐藏 */
+            display: none; /* 默认隐藏 */
         }
 
-        /* 激活的卡片才显示 */
+        /* 强制第一张卡片和激活的卡片显示 */
         .card.active {
-            display: block;
+            display: block !important;
         }
 
         h2 {
@@ -64,11 +64,7 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
             display: inline-block;
-            transition: transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
+            margin-top: 10px;
         }
 
         .btn:disabled {
@@ -77,7 +73,6 @@
             cursor: not-allowed;
         }
 
-        /* 互动关卡专属样式 */
         .big-icon {
             font-size: 65px;
             margin: 15px 0;
@@ -109,7 +104,6 @@
             position: relative;
         }
         
-        /* 调皮躲闪按钮 */
         #escapeBtn {
             position: absolute;
             background: #94a3b8;
@@ -119,7 +113,7 @@
 </head>
 <body>
 
-    <div id="level1" class="card active">
+    <div id="level1" class="card active" style="display: block;">
         <h2>给你的一封神秘信件 💌</h2>
         <div class="big-icon">✉️</div>
         <p style="text-align: center; font-weight: bold; color: #ff758f;">你有一封未读的认错请求...</p>
@@ -132,7 +126,7 @@
         <p>报告生成完毕：
         这次确实是我做的不对，不该惹你生气。
         
-        惹你开心我最在行，惹你生气我真是个笨蛋。大脑已经死机反省一整天了，请问可以激活原谅卡吗？</p>
+        惹你开心我最在行，惹你生气我真是个大笨蛋。大脑已经死机反省一整天了，请问可以激活原谅卡吗？</p>
         <button class="btn" onclick="nextLevel(2)">点此激活原谅卡</button>
     </div>
 
@@ -183,31 +177,36 @@
     </div>
 
     <script>
-        // 核心切换逻辑：最基础的显隐切换，任何设备都不会卡死
         function nextLevel(current) {
-            document.getElementById('level' + current).classList.remove('active');
-            document.getElementById('level' + (current + 1)).classList.add('active');
+            // 先隐藏当前卡片
+            var currentCard = document.getElementById('level' + current);
+            currentCard.style.display = 'none';
+            currentCard.classList.remove('active');
+            
+            // 再显示下一张卡片
+            var nextCard = document.getElementById('level' + (current + 1));
+            nextCard.style.display = 'block';
+            nextCard.classList.add('active');
         }
 
-        // 第3关：心跳充能逻辑
         let clicks = 0;
         function chargeHeart() {
             if(clicks < 5) {
                 clicks++;
-                document.querySelector('#level3 h2').innerText = `我的心跳现在是 ${clicks * 20}% 💓`;
+                document.querySelector('#level3 h2').innerText = '我的心跳现在是 ' + (clicks * 20) + '% 💓';
                 if(clicks === 5) {
-                    document.querySelector('#level3 h2').innerText = `我的心跳现在是 100% 💖`;
+                    document.querySelector('#level3 h2').innerText = '我的心跳现在是 100% 💖';
                     document.getElementById('chargeStatus').innerText = "充能 100%！满血复活！";
                     document.getElementById('level3Btn').style.display = 'inline-block';
                 }
             }
         }
 
-        // 第4关：多选框勾选逻辑
         function toggleCheck(id) {
             document.getElementById(id).checked = !document.getElementById(id).checked;
             checkClauses();
         }
+        
         function checkClauses() {
             const c1 = document.getElementById('c1').checked;
             const c2 = document.getElementById('c2').checked;
@@ -215,10 +214,8 @@
             document.getElementById('level4Btn').disabled = !(c1 && c2 && c3);
         }
 
-        // 第5关：赖皮跑路按钮逻辑
         function escape(btn) {
             btn.style.position = 'fixed';
-            // 限制在屏幕安全范围内随机移动
             btn.style.left = Math.floor(Math.random() * 60 + 15) + 'vw';
             btn.style.top = Math.floor(Math.random() * 60 + 15) + 'vh';
         }
