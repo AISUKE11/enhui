@@ -12,8 +12,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
-            font-family: 'Helvetica Neue', Helvetica, sans-serif;
+            background-color: #ffe5ec;
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,45 +21,21 @@
             overflow: hidden;
         }
 
-        #animationCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
+        /* 卡片基础样式 */
         .card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            width: 420px;
-            max-width: 90vw;
-            padding: 35px 30px;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.15);
+            background: #ffffff;
+            width: 380px;
+            max-width: 85vw;
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 75, 110, 0.15);
             text-align: center;
-            z-index: 10;
-            position: absolute;
-            transition: all 0.4s ease;
-            opacity: 0;
-            transform: scale(0.9) translateY(30px);
-            pointer-events: none;
+            display: none; /* 默认全部隐藏 */
         }
 
+        /* 激活的卡片才显示 */
         .card.active {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: auto;
-            position: relative;
-        }
-
-        .card.exit {
-            opacity: 0;
-            transform: scale(0.9) translateY(-50px);
-            pointer-events: none;
+            display: block;
         }
 
         h2 {
@@ -78,7 +54,7 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
+            background: #ff4d6d;
             color: white;
             border: none;
             padding: 12px 30px;
@@ -87,9 +63,12 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-            transition: all 0.2s ease;
             display: inline-block;
-            margin-top: 10px;
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
         }
 
         .btn:disabled {
@@ -98,32 +77,9 @@
             cursor: not-allowed;
         }
 
-        .envelope {
-            font-size: 70px;
-            margin: 15px 0;
-            cursor: pointer;
-        }
-
-        .progress-container {
-            background: #eee;
-            border-radius: 10px;
-            height: 12px;
-            width: 100%;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        .progress-bar {
-            background: linear-gradient(90deg, #ff8fa3, #ff4d6d);
-            height: 100%;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .heart-clicker {
-            font-size: 60px;
-            color: #ff4d6d;
-            cursor: pointer;
-            display: inline-block;
+        /* 互动关卡专属样式 */
+        .big-icon {
+            font-size: 65px;
             margin: 15px 0;
         }
 
@@ -136,10 +92,9 @@
             align-items: flex-start;
             gap: 10px;
             margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.6);
+            background: #fff0f3;
             padding: 10px 14px;
             border-radius: 12px;
-            cursor: pointer;
         }
         .clause-item input {
             margin-top: 4px;
@@ -153,127 +108,102 @@
             margin-top: 20px;
             position: relative;
         }
+        
+        /* 调皮躲闪按钮 */
         #escapeBtn {
             position: absolute;
             background: #94a3b8;
+            box-shadow: none;
         }
-    </script>
+    </style>
 </head>
 <body>
 
-    <canvas id="animationCanvas"></canvas>
-
     <div id="level1" class="card active">
         <h2>给你的一封神秘信件 💌</h2>
-        <div class="envelope" onclick="nextLevel(1)">✉️</div>
-        <p style="text-align: center; font-weight: bold; color: #ff758f; margin-bottom: 15px;">你有一封未读的认错请求...</p>
+        <div class="big-icon">✉️</div>
+        <p style="text-align: center; font-weight: bold; color: #ff758f;">你有一封未读的认错请求...</p>
         <button class="btn" onclick="nextLevel(1)">点击拆阅信件</button>
     </div>
 
     <div id="level2" class="card">
-        <h2>系统正在深度反思... 💻</h2>
-        <div class="progress-container">
-            <div id="progressBar" class="progress-bar"></div>
-        </div>
-        <p id="typewriterText" style="min-height: 80px; font-weight: 500;"></p>
-        <button id="level2Btn" class="btn" style="display: none;" onclick="nextLevel(2)">继续阅读</button>
+        <h2>深度反思报告 💻</h2>
+        <div class="big-icon">🤦‍♂️</div>
+        <p>报告生成完毕：
+        这次确实是我做的不对，不该惹你生气。
+        
+        惹你开心我最在行，惹你生气我真是个笨蛋。大脑已经死机反省一整天了，请问可以激活原谅卡吗？</p>
+        <button class="btn" onclick="nextLevel(2)">点此激活原谅卡</button>
     </div>
 
     <div id="level3" class="card">
         <h2>我的心跳现在是 0% 💔</h2>
         <p style="text-align: center;">由于惹你生气，我的心脏已经停止了能量供应。需要小仙女连续戳它 5 次，才能重新启动...</p>
-        <div id="heartClicker" class="heart-clicker" onclick="chargeHeart()">❤️</div>
-        <div id="chargeStatus" style="font-size: 14px; color: #ff758f; font-weight: bold;">等待充能...</div>
+        <div id="heartClicker" class="big-icon" style="cursor:pointer; user-select:none;" onclick="chargeHeart()">❤️</div>
+        <div id="chargeStatus" style="font-size: 14px; color: #ff758f; font-weight: bold; margin-bottom: 10px;">等待充能...</div>
         <button id="level3Btn" class="btn" style="display: none;" onclick="nextLevel(3)">注入能量成功</button>
     </div>
 
     <div id="level4" class="card">
         <h2>小仙女专属不平等条约 📜</h2>
-        <p style="font-size:13px; color:#777; margin-bottom:15px;">请仔细阅读并勾选以下条款，以便生成终身承诺：</p>
+        <p style="font-size:13px; color:#777; margin-bottom:15px; text-align: center;">请认真阅读并勾选以下条款：</p>
         <div class="clause-list">
             <div class="clause-item" onclick="toggleCheck('c1')">
                 <input type="checkbox" id="c1" onclick="event.stopPropagation(); checkClauses();">
-                <label style="cursor:pointer;">以后一有不高兴，我都在3分钟内无条件开始哄你。</label>
+                <label style="cursor:pointer; font-size: 14px;">以后一有不高兴，我都在3分钟内无条件开始哄你。</label>
             </div>
             <div class="clause-item" onclick="toggleCheck('c2')">
                 <input type="checkbox" id="c2" onclick="event.stopPropagation(); checkClauses();">
-                <label style="cursor:pointer;">这周末必须带你去吃好吃的，主动剥虾、擦嘴、拎包。</label>
+                <label style="cursor:pointer; font-size: 14px;">这周末必须带你去吃好吃的，主动剥虾、擦嘴、拎包。</label>
             </div>
             <div class="clause-item" onclick="toggleCheck('c3')">
                 <input type="checkbox" id="c3" onclick="event.stopPropagation(); checkClauses();">
-                <label style="cursor:pointer;">永远觉得你最漂亮，把你宠上天。</label>
+                <label style="cursor:pointer; font-size: 14px;">永远觉得你最漂亮，把你宠上天，绝不冷战。</label>
             </div>
         </div>
-        <button id="level4Btn" class="btn" disabled onclick="nextLevel(4)">我已签字画押，申请下一步</button>
+        <button id="level4Btn" class="btn" disabled onclick="nextLevel(4)">已签字画押，下一步</button>
     </div>
 
     <div id="level5" class="card">
         <h2>最后，可以原谅我吗？ 🥺</h2>
         <p style="text-align: center;">反省非常深刻，诚意突破天际，原谅我这一次好不好？</p>
         <div class="btn-group">
-            <button class="btn" onclick="triggerFinalSurprise()">大发慈悲原谅你</button>
+            <button class="btn" onclick="nextLevel(5)">大发慈悲原谅你</button>
             <button id="escapeBtn" class="btn" onmouseover="escape(this)" onclick="escape(this)">绝对不原谅！</button>
         </div>
     </div>
 
     <div id="level6" class="card">
         <h2>🎉 恭喜你收获听话男朋友一只！</h2>
-        <div style="font-size: 16px; color: #333; line-height: 2; text-align: center;">
-            <p style="text-align: center; font-weight: bold; color: #ff4d6d; font-size: 18px; margin-bottom: 10px;">✨ 谢谢宝贝的原谅！✨</p>
-            <p>今天让你不开心了，我保证以后会更加注意，不让你受半点委屈。不开心的事情翻篇啦！今晚听凭您的差遣 ❤️</p>
-        </div>
-        <div style="margin-top: 20px; font-size: 40px;">🌹🧸🍰</div>
+        <div class="big-icon">🎈✨❤️</div>
+        <p style="text-align: center; font-weight: bold; color: #ff4d6d; font-size: 18px; margin-bottom: 10px;">✨ 谢谢宝贝的原谅！✨</p>
+        <p>今天让你不开心了，我保证以后会更加注意，不让你受半点委屈。
+        
+        不开心的事情已经翻篇啦！今晚听凭您的差遣，想吃什么、想怎么惩罚我，我都随时待命！手拉手一直走下去 ❤️</p>
     </div>
 
     <script>
+        // 核心切换逻辑：最基础的显隐切换，任何设备都不会卡死
         function nextLevel(current) {
             document.getElementById('level' + current).classList.remove('active');
-            document.getElementById('level' + current).classList.add('exit');
-            setTimeout(() => {
-                document.getElementById('level' + (current + 1)).classList.add('active');
-                if(current === 1) startTypewriter();
-            }, 300);
+            document.getElementById('level' + (current + 1)).classList.add('active');
         }
 
-        const dialogs = [
-            "正在扫描错误行为... 🚨\n发现‘惹仙女不高兴’一级重罪。",
-            "正在启动深刻反思机制... 🧠\n反思结果：我真是一个天字第一号大笨蛋。",
-            "反思报告已生成：100%全是我的错。\n惩罚机制已就绪：今后要把你宠得无法无天！"
-        ];
-        
-        function startTypewriter() {
-            const bar = document.getElementById('progressBar');
-            const txt = document.getElementById('typewriterText');
-            let progress = 0;
-
-            const timer = setInterval(() => {
-                progress += 1;
-                bar.style.width = progress + '%';
-                
-                if (progress === 15) { txt.innerHTML = dialogs[0].replace(/\n/g, '<br>'); }
-                if (progress === 50) { txt.innerHTML = dialogs[1].replace(/\n/g, '<br>'); }
-                if (progress === 80) { txt.innerHTML = dialogs[2].replace(/\n/g, '<br>'); }
-
-                if (progress >= 100) {
-                    clearInterval(timer);
-                    document.getElementById('level2Btn').style.display = 'inline-block';
-                }
-            }, 40);
-        }
-
+        // 第3关：心跳充能逻辑
         let clicks = 0;
         function chargeHeart() {
             if(clicks < 5) {
                 clicks++;
                 document.querySelector('#level3 h2').innerText = `我的心跳现在是 ${clicks * 20}% 💓`;
                 if(clicks === 5) {
-                    document.getElementById('level3 h2').innerText = `我的心跳现在是 100% 💖`;
-                    document.getElementById('chargeStatus').innerText = "充能100%！满血复活！💖";
+                    document.querySelector('#level3 h2').innerText = `我的心跳现在是 100% 💖`;
+                    document.getElementById('chargeStatus').innerText = "充能 100%！满血复活！";
                     document.getElementById('level3Btn').style.display = 'inline-block';
                 }
             }
         }
 
+        // 第4关：多选框勾选逻辑
         function toggleCheck(id) {
             document.getElementById(id).checked = !document.getElementById(id).checked;
             checkClauses();
@@ -285,8 +215,13 @@
             document.getElementById('level4Btn').disabled = !(c1 && c2 && c3);
         }
 
+        // 第5关：赖皮跑路按钮逻辑
         function escape(btn) {
             btn.style.position = 'fixed';
-            btn.style.left = Math.random() * 60 + 20 + 'vw';
-            btn.style.top = Math.random() * 60 + 20 + 'vh';
+            // 限制在屏幕安全范围内随机移动
+            btn.style.left = Math.floor(Math.random() * 60 + 15) + 'vw';
+            btn.style.top = Math.floor(Math.random() * 60 + 15) + 'vh';
         }
+    </script>
+</body>
+</html>
